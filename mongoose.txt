@@ -1,0 +1,229 @@
+MongoDB(Collection , Document)  : ko có tính chặc chẽ
+điểm lợi là dữ liệu ko có dàng buộc thì dùng đc
+
+npm install mongooes --save   // tải file trong vscode
+muốn format code db.user.find().pretty();
+------ remove database------------
+
+show dbs;
+
+> db
+user
+> db.dropDatabase()
+
+db.Dulieu.find( {_id : -1 } )  // xem danh sách ở cuối cùng 
+
+- truy vấn 
+db.Pategory.find({
+	Product:Objectld("123125132131")
+})
+
+cmd : mongo  
+	- exit 
+	- show dbs ;    // xem từng thư mục có những database nào
+	- use <db-name>  // để tạo databast mới , chọn use này để làm việc cùng 
+	- db // xem đang ở databast hiện tại là gì
+- db.<conllection>.<command>(find ,insert , update ,updateMany,..)
+
+lệnh db.getcollection = db.category  
+ 	new Date();
+	db.product.findOne()   // trả về onbject đầu tiên
+	db.product.findOne()._id  // trả về id đầu tiên ....// gọi giá trị
+
+	Methods:
+		- getTimestamp
+		- valueof     // trả về string
+		- toString
+	Properties
+		-str    // trả về string
+
+
+----------------------method Collection ----------------------
+db.collection.drop() ;  			 // ex db.shopping.drop() ;   
+db.collection.renameCollection("new name") ;  	//   
+
+------------------ index---------------------
+> db.Dulieu.createIndex({ name  : 1 })   // name này đc tạo rồi 
+{
+        "numIndexesBefore" : 2,
+        "numIndexesAfter" : 2,
+        "note" : "all indexes already exist",
+        "ok" : 1
+}
+
+  link :  https://bom.to/HLdPnV5jz79iU
+
+-------insert------
+//insert
+//insertMany
+	
+- db.product.insert({name:'Macbook'  , category :ObjectId("6076d3e9f703fd641cb1e90c")} )  // insert 1 đối tượng 
+
+db.products.insert(     // insert nhiều  đối tượng cần []
+   [
+     { item: "pen", qty: 20 },
+     { item: "eraser", qty: 25 }
+   ]
+)
+-------update------
+//update
+//updateOne  : phải có set mới dùng đc 
+//updateMany : phải có set mới dùng đc 
+
+db.product.update({_id: ObjectId("6076d3e9f703fd641cb1e90c") } ,{ $set : {stock: 100}})   //  tìm id như thế rồi set cho nói hoặc thêm stock: 100 vào
+
+db.test.update({name :"tien" } ,{age:24})   // tìm những người tên tien và xóa hết dữ liệu đổi thành age:24 có set thì khác
+db.test.update({name :"tien" } ,{$set :{age:24})  // dữ liệu còn nguyên , set age lại chưa có thì thêm vào 
+EX1 :
+data  :	{ "_id" : ObjectId("607e7e205d8cecc72e208ccd"), "name" : "khactien", "setting" : { "language" : "en", "age" : 25 } }
+
+	 db.test5.updateOne({ _id: .... } , {$set : { setting  : { language : "vn" } } })   // nó sẽ set setting còn lại các khác sẽ mất đi
+	=> { "_id" : ObjectId("607e7e205d8cecc72e208ccd"), "name" : "khactien", "setting" : { "language" : "vn" } }
+	 
+	 db.test5.updateOne({ _id: .... } , {$set : { "setting.language" :  "vn" })   // set từng cái 
+	=> { "_id" : ObjectId("607e81e55d8cecc72e208cd0"), "name" : "khactien", "setting" : { "language" : "vn", "age" : 25 } }
+	
+--------------------delete -----------------------
+//deleteOne  // ko có delete vì tính an toàn nên chỉ có deleteOne và deleteMany
+//deleteMany
+
+ex : db.test5.deleteMany({point :2})  // xóa những data nào có point :2
+     db.test5.deleteOne({name : "khactien"}) // xóa 1 trường 
+     db.test5.deleteMany({})    // xóa hết dữ liệu trong database
+
+--------value------------------------
+{key:value}  //so sánh bằng
+{key:{$ne: value}} //  so sánh bằng ko bằng //not equal
+{key:{$gt: value}}  // lớn hơn
+{key:{$gte: value}} // lớn hơn hoặc bằng 
+{key:{$lt: value}} // nhỏ hơn
+{key:{$lte: value}}  // nhỏ hơn hoặc bằng
+{key:{$in: value}}   // in nằm trong những   {age:{$in: [24 ,17]}}
+{key:{$nin: value}}  // not in ko nằm trong 
+
+ex :db.Pategory.find({age:{$ne: 35}}).pretty(); // tuổi lớn hơn 35
+   db.shopping.find({age:{$in: [24 ,17]}}).pretty();  // lấy những ai có tuổi 24 và 17 
+
+
+$ kết thúc string
+ex :  db.shopping.find({email:/.gmail$/}).pretty(); // tìm .gmail cuối cùng $ để kết thúc bởi  .gmail
+\ dấu này để phân biệt là 1 ký tự như dấu . 
+^ là bắt đầu 1 cái gì đó 
+ex :db.shopping.find({ip:/^1\./}).pretty();  // tìm bắt đầu 1. // dấu \ phân biệt đó là 1 ký tự chứ ko phải là dấu. của express 
+
+AND :khai báo bình thường
+ex :db.shopping.find({gender:'mail', age :{$gt :35} }).pretty(); //tìm giới tính nam là tuổi lớn hơn 35
+$or
+
+//Nested objects
+{
+	name : "khactien",
+	profile:{
+	   city:"DaNang"
+	   Phone : 012312461
+	}
+}
+ =>  db.shopping.find({"profile.city":"DaNang"});
+
+-----------------------------Array filed
+{
+	profile:{
+	   city:"DaNang"
+	   Phone : 012312461
+	},
+	language : ["English" , "VietNam" , "đức"]
+}
+
+ =>  db.shopping.find({language:"VietNam"}); // nó sẽ xuất ra những object có ngôn ngữ 
+	{
+		profile:{
+	   		city:"DaNang"
+	   		Phone : 012312461
+		},
+		language : ["English" , "VietNam" , "đức"]
+	}
+ =>  db.shopping.find({language:{$size : 2 }}); // sẽ ko xuất ra vì ko có object nào có 2 giá 
+ =>  db.shopping.find({language:{$size : 3 }}); // vì array có 3 giá trị đúng
+	{
+		profile:{
+	   		city:"DaNang"
+	   		Phone : 012312461
+		},
+		language : ["English" , "VietNam" , "đức"]
+	}
+
+// Array of embedded documents
+db.test.find({pet : {$elemMatch: {type : 2 , name : /^m/}} });  // lọc đúng những kiểu type : 2 và name bắt đầu bằng m // ko phải lọc các phần từ ... và ...
+
+// Query empty fields 	 // exists : tồn tại // xem cái gì có tồn tại hay ko
+	db.shopping.find({name : null}); 
+	db.shopping.find({name :{$exists : false }}); 
+
+-------------- where------------ // sử lý  code js    // dùng this
+ db.test.find({$where :"this.firtname !== this.lastname"})   // dùng this.  và trong dấu "" 
+=> { "_id" : ObjectId("607dbce5d1fb835a3e5abd26"), "firtname" : "ngo", "lastname" : "tien" } 
+
+------------- count , skip , limit----------------
+count() :  đếm tổng số các phần tử 
+skip(x) : bỏ qua x phần tử đầu tiên 
+limit(y) : nó trả về câu lệnh giới hạn có bao nhiêu phần tử xuất ra
+ex :
+   cách 1 : 	db.test.count({name :"khactien"})
+       		=> 2 // trả về số lượng 
+   cách 2 : 	db.test.find({name :"khactien"}).count() ;
+       		=> 2 // trả về số lượng 
+  db.test.find({"profile.city":"daNang"}).limit(3)   // xem 3 cái đầu 
+  db.test.find({"profile.city":"daNang"}).skip(3)
+  db.test.find({"profile.city":"daNang"}).skip(3).limit(1)  // bỏ qua 3 cái đầu (skip) lấy 1 cái xem (limit) 
+
+----------------sort --------------
+	db.test.find({"profile.city":"daNang"}).sort({
+		field : -1
+	})
+	
+        1 : sắp xếp tăng dần (nhỏ trước lớn sau )
+	-1 : sắp xếp giảm dần (lớn trước nhỏ sau )
+
+  ex : db.test5.find().sort({point:-1})
+
+------------------inc ,push ,pull , addToSet -------------------  áp dụng cho update
+  $inc 		 tăng 1 trường lên 1  đơn vị
+  $push 	push 1 giá trị nào đó vào array
+  $pull    	pull 1 giá trị nào đó ra array
+  $addToSet     nều mà nó đã tồn tại trong arry rồi thì nó ko push nào nữa
+
+	ex : 
+		{ "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 1 }
+		> db.test5.updateOne({ _id:ObjectId("607e88c45d8cecc72e208cd4")}, {$inc : {point: 1} })
+         	=> { "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 2 }
+		
+		> db.test5.updateOne({ _id:ObjectId("607e88c45d8cecc72e208cd4")}, {$push : {name: "khactien"} })
+		=> { "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 2, "name" : [ "khactien" ] }           // đẩy vào array
+	
+		>db.test5.updateOne({ _id:ObjectId("607e88c45d8cecc72e208cd4")}, {$pull : {name: "khactien"} })
+		=> { "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 2, "name" : [  ] }           // array rổng
+ 	ex : VD: như like 1 bài viết chỉ có like 1 lần 
+		{ "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 1 , "name" : [ "khactien" ] }
+		 > db.test5.updateOne({ _id:ObjectId("607e88c45d8cecc72e208cd4")}, {$addToSet : {name: "khactien"} })  // đã có name là khactien rồi ko thêm vào nữa 
+
+		{ "_id" : ObjectId("607e88c45d8cecc72e208cd4"), "point" : 1 , "name" : [ "khactien" ] }        
+
+
+// xuất dữ liệu ra ngoài 
+user.find().exec((err, users)=>{
+    console.log(users);
+})
+
+// cập nhập 
+user.update({name:"tien"},{name: "tam"})
+.exec((err, result) =>{
+    console.log(result);
+})
+
+
+// xóa
+user.remove({name : "ti"})
+.exec((err, result) =>{
+    console.log(result);
+})
+

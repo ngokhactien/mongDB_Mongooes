@@ -1,0 +1,17 @@
+{
+  "course" : [
+    {
+      "name" : "NgoKhacTien1",
+      "age" : "23",
+      "city" : "ĐaNang",
+      "id" : 1
+    }
+  ],
+  "status": [
+    {
+        "name": "ngo khac tien",
+        "age": 23,
+        "city" : "Tp Buôn Ma Thuộc"
+    }
+  ] 
+}
