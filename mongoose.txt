@@ -3,27 +3,21 @@ MongoDB(Collection , Document)  : ko có tính chặc chẽ
 
 npm install mongooes --save   // tải file trong vscode
 muốn format code db.user.find().pretty();
------- remove database------------
 
-show dbs;
 
-> db
-user
-> db.dropDatabase()
-
-db.Dulieu.find( {_id : -1 } )  // xem danh sách ở cuối cùng 
-
-- truy vấn 
-db.Pategory.find({
-	Product:Objectld("123125132131")
-})
 
 cmd : mongo  
 	- exit 
 	- show dbs ;    // xem từng thư mục có những database nào
-	- use <db-name>  // để tạo databast mới , chọn use này để làm việc cùng 
-	- db // xem đang ở databast hiện tại là gì
+	- use <db-name>  // tạo xong use <db-name> = db // để tạo databast mới 
+	- db 		// xem đang ở databast hiện tại là gì
+	- db.<conllection>.... // tạo tên bảng của database  // database.tenbangr
 - db.<conllection>.<command>(find ,insert , update ,updateMany,..)
+
+
+db.Pategory.find({
+	Product:Objectld("123125132131")
+})
 
 lệnh db.getcollection = db.category  
  	new Date();
@@ -36,7 +30,15 @@ lệnh db.getcollection = db.category
 		- toString
 	Properties
 		-str    // trả về string
+------ remove database------------
 
+show dbs; // show có database nào ko
+
+>use name  // tạo database
+> db.name.. // tạo data_table
+> db.dropDatabase()
+---------------
+db.Dulieu.find( {_id : -1 } )  // xem danh sách ở cuối cùng 
 
 ----------------------method Collection ----------------------
 db.collection.drop() ;  			 // ex db.shopping.drop() ;   
@@ -44,12 +46,6 @@ db.collection.renameCollection("new name") ;  	//
 
 ------------------ index---------------------
 > db.Dulieu.createIndex({ name  : 1 })   // name này đc tạo rồi 
-{
-        "numIndexesBefore" : 2,
-        "numIndexesAfter" : 2,
-        "note" : "all indexes already exist",
-        "ok" : 1
-}
 
   link :  https://bom.to/HLdPnV5jz79iU
 
@@ -98,13 +94,13 @@ ex : db.test5.deleteMany({point :2})  // xóa những data nào có point :2
 {key:{$gte: value}} // lớn hơn hoặc bằng 
 {key:{$lt: value}} // nhỏ hơn
 {key:{$lte: value}}  // nhỏ hơn hoặc bằng
-{key:{$in: value}}   // in nằm trong những   {age:{$in: [24 ,17]}}
+{key:{$in: value}}   // in nằm trong những   {age:{$in: [24 ,17]}} // cái này 24 hoặc 17
 {key:{$nin: value}}  // not in ko nằm trong 
 
 ex :db.Pategory.find({age:{$ne: 35}}).pretty(); // tuổi lớn hơn 35
    db.shopping.find({age:{$in: [24 ,17]}}).pretty();  // lấy những ai có tuổi 24 và 17 
 
-
+/  /  : chuổi
 $ kết thúc string
 ex :  db.shopping.find({email:/.gmail$/}).pretty(); // tìm .gmail cuối cùng $ để kết thúc bởi  .gmail
 \ dấu này để phân biệt là 1 ký tự như dấu . 
